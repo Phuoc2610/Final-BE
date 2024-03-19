@@ -1,0 +1,16 @@
+import { roles } from "./data/roles";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+async function main() {
+        await prisma.role.createMany({
+            data: roles,
+        }) 
+}
+
+main().catch(e => {
+    process.exit(1)
+}).finally(() => {
+    prisma.$disconnect();
+})
