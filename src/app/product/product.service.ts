@@ -46,7 +46,7 @@ export class ProductService {
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
-    const product = this.findOne(id)
+    const product = await this.findOne(id)
     if (!product) {
       throw new ForbiddenException("Error id")
     }
