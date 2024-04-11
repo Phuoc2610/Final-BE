@@ -40,7 +40,8 @@ export class CategoryService {
     }
 
     async update(id: string, updateCatgoryDTO: UpdateCategoryDTO): Promise<Category> {
-        const category = this.findById(id)
+        const category = await this.findById(id)
+
         if (!category) {
             throw new ForbiddenException("Error id")
         }
