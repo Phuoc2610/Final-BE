@@ -10,15 +10,18 @@ export class CreateOrderDTO {
     @IsNumber()
     @IsNotEmpty()
     @ApiProperty()
-    totalPrice: number;
+    price: number;
 
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
     productId: string;
 
-    @IsString()
+
+    @IsNumber()
     @IsNotEmpty()
     @ApiProperty()
-    userId:string
+    quantity:number
+
+
 }
