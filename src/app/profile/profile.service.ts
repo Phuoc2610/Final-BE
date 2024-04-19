@@ -23,14 +23,12 @@ export class ProfileService {
                 userId: id
             }
         })
-        if(!profile){
-            throw new ForbiddenException("Error ")
-        }
         return profile
     }
 
     async updateProfile(id: string, updateProfileDTO :UpdateProfileDto) : Promise<Profile>{
-        const profile = this.getProfile(id)
+        const profile = await this.getProfile(id)
+        console.log(profile)
         return await this.prismaService.profile.update({
             where:{
                 id: id
