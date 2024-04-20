@@ -33,7 +33,7 @@ export class AuthService {
                     lastName: registerDTO.lastName,
                 },
             })
-            const role = await this.connectRoleUser(user.id, "clgywq0h8000308l3a38y39t6")
+            await this.connectRoleUser(user.id, "clgywq0h8000308l3a38y39t6")
             await this.createProfile(user);
             return this.createJwtToken(user.id, user.email, userRole.name)
         } catch (error) {
@@ -47,7 +47,10 @@ export class AuthService {
         return await this.prismaService.profile.create({
             data: {
                 fullName: user.firstName + user.lastName,
-                userId: user.id
+                userId: user.id,
+                address: '117 nguyen tri phuong',
+                avatarUrl: 'https://cdn-icons-png.freepik.com/512/147/147142.png',
+                gender: 'male'
             }
         })
     }
@@ -122,15 +125,19 @@ export class AuthService {
         userId: string,
         email: string,
         roles: string,
-    ): Promise<any> {
+    ): Promise<{accessToken:string}> {
         const payload = {
             id: userId,
             email,
             roles,
         };
-        return await this.jwtService.signAsync(payload, {
+        const jwtString =  await this.jwtService.signAsync(payload, {
             secret: this.configService.get('JWT_SECRET'),
             expiresIn: '7d',
         })
+
+        return {
+            accessToken: jwtString,
+        }
     }
 }
