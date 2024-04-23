@@ -4,6 +4,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/database/prisma/prisma.service';
 import { Product } from '@prisma/client';
 import { PaginationResult } from 'src/common/helper/paginationResult.interface';
+import { OptionEnum } from 'src/common/enums/option.enum';
 
 @Injectable()
 export class ProductService {
@@ -20,13 +21,35 @@ export class ProductService {
     })
   }
 
-  async findAll(page:number, perPage:number): Promise<PaginationResult<Product>> {
+  async findAll(page:number, perPage:number, name:string, categoryId:string, storeId:string): Promise<PaginationResult<Product>> {
+    console.log(name)
     const totalItems = await this.prismaService.product.count();
     const totalPages = Math.ceil(totalItems / perPage);
     const skip = (page - 1) * perPage;
     const take = parseInt(String(perPage), 10);
 
     const data= await this.prismaService.product.findMany({
+      where: {
+        AND: [
+          {
+            name: {
+              contains: name,
+              mode: 'insensitive' // This sets the search to be case-insensitive
+            }
+          },
+          {
+            categoryid: categoryId // Assuming 'categoryid' is the correct field name
+          },
+          {
+            storeId: storeId
+          }
+        ]
+      },
+      // orderBy:[
+      //   {
+      //     price: orderBy || 'asc'
+      //   }
+      // ],
       skip,
       take,
       include: {
@@ -51,7 +74,19 @@ export class ProductService {
       },
       include:{
         productImages:true,
-        store:true
+        store:true,
+        feedback:{
+          include:{
+            user:
+            {
+              include:{
+                profile:true
+              }
+            }
+          }
+        },
+        
+        
       }
 
     })

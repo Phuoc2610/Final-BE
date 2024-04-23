@@ -3,6 +3,9 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { OptionEnum } from 'src/common/enums/option.enum';
+import { IsOptional } from 'class-validator';
+import { OptionDTO } from './dto/optionDto';
 
 @Controller('product')
 @ApiTags('Prodcut')
@@ -18,8 +21,9 @@ export class ProductController {
   findAll(
     @Query('page') page: number,
     @Query('perPage') perPage: number,
+    @Query() option:OptionDTO,
   ) {
-    return this.productService.findAll(page, perPage);
+    return this.productService.findAll(page, perPage, option.name, option.categoryId, option.storeId);
   }
 
   @Get(':id')
