@@ -25,6 +25,13 @@ export class OrderService {
             where: {
                 id: id
             },
+            include:{
+                orderDetail:{
+                    include:{
+                        product:true
+                    }
+                }
+            }
 
         })
         return Order

@@ -25,6 +25,10 @@ export class OrderController{
         return await this.orderSerivce.findByUserId(id)
     }
 
+    @Get(':id')
+    getById(@Param('id') id:string){
+        return this.orderSerivce.findById(id)
+    }
     @Roles(Role.User)
     @Post()
     async createOrder(@GetUser('id') id: string, @Body() createOrderDTO: CreateOrderDTO){
